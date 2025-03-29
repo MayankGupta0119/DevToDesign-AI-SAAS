@@ -14,15 +14,15 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   name    String
-  email   String   @unique
-  credits Int      @default(0)
+  email   String @unique
+  credits Int    @default(0)
 }
 
 model WireframeToCode {
-  id          Int      @id @default(autoincrement())
-  uid         Int
+  id          Int     @id @default(autoincrement())
+  uid         String  @unique
   imageUrl    String?
   model       String?
   description String?

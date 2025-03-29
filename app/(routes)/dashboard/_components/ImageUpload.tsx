@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CloudUpload, Divide, WandSparkles, X } from "lucide-react";
 import Image from "next/image";
+import { v4 as uuidv4 } from "uuid";
 import React, { ChangeEvent, useState } from "react";
 import {
   Select,
@@ -14,6 +15,7 @@ import {
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/configs/firebaseConfig";
 import axios from "axios";
+import { useAuthContext } from "@/app/provider";
 
 function ImageUpload() {
   const AiModelList = [
@@ -37,6 +39,8 @@ function ImageUpload() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // to get user details
+  const { user } = useAuthContext();
   const OnImageSelectPrev = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -65,10 +69,18 @@ function ImageUpload() {
       console.log("Download URL -->", imgUrl);
 
       // Here you can add your API call to process the image with the selected AI model
+      //generating a unique uid with uuid4 library
+      const uid = uuidv4();
       //saving info to the Database
-      const result = await axios.post('/api/wireframe-to-code',{
-        
-      })
+      const result = await axios.post("/api/wireframe-to-code", {
+        uid: uid,
+        description: description,
+        imageUrl: imgUrl,
+        model: model,
+        email: user?.email,
+      });
+      console.log("Result -->", result.data);
+
       // const response = await fetch('/api/process-image', {
       //   method: 'POST',
       //   body: JSON.stringify({

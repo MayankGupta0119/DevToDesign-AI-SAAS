@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     const result = await prisma.wireframeToCode.create({
       data: {
-        uid: Number(uid),
+        uid: uid,
         imageUrl: imageUrl,
         model: model,
         description: description,
