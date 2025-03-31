@@ -1,0 +1,50 @@
+import Constants from "@/data/Constants";
+import { NextRequest } from "next/server";
+import OpenAI from "openai";
+const openai = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_AI_API_KEY,
+});
+export async function POST(req: NextRequest) {
+  const { model, description, imageUrl } = await req.json();
+  const modelObj = Constants?.AiModelList.find((item) => item.name === model);
+  const modelName = modelObj?.modelName;
+  console.log("Model Name ===>", modelName);
+  const response = await openai.chat.completions.create({
+    model: modelName ?? "google/gemini-2.5-pro-exp-03-25:free",
+    // if the modelName doesn't exist then will use the default as gemini. therefore double ?.
+    stream: true,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: description,
+          },
+          {
+            type: "image_url",
+            image_url: {
+              url: imageUrl,
+            },
+          },
+        ],
+      },
+    ],
+  });
+  //create a readable stream to send data line by line
+  const stream = new ReadableStream({
+    async start(controller) {
+      for await (const chunk of response) {
+        const text = chunk.choices?.[0]?.delta?.content || "";
+        controller.enqueue(new TextEncoder().encode(text)); //sends data chunk
+      }
+      controller.close(); // end stream
+    },
+  });
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });
+}

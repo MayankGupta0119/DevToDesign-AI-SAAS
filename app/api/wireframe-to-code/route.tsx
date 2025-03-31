@@ -24,3 +24,17 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  const reqUrl = req.url;
+  const { searchParams } = new URL(reqUrl);
+  const uid = searchParams?.get("uid");
+  if (uid) {
+    const result = await prisma.wireframeToCode.findUnique({
+      where: { uid: uid },
+    });
+    return NextResponse.json(result);
+  } else {
+    return NextResponse.json({ error: "No Record was found" });
+  }
+}

@@ -16,22 +16,10 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/configs/firebaseConfig";
 import axios from "axios";
 import { useAuthContext } from "@/app/provider";
+import { useRouter } from "next/navigation"; // ✅ Correct
+import Constants from "@/data/Constants";
 
 function ImageUpload() {
-  const AiModelList = [
-    {
-      name: "Gemini Google",
-      icon: "/google.png",
-    },
-    {
-      name: "llama by Meta",
-      icon: "/meta.png",
-    },
-    {
-      name: "Deepseek",
-      icon: "/deepseek.png",
-    },
-  ];
   const [prevUrl, setPrevUrl] = useState<string | null>(null);
   const [file, setfile] = useState<any>();
   const [model, setModel] = useState<string>();
@@ -41,6 +29,8 @@ function ImageUpload() {
 
   // to get user details
   const { user } = useAuthContext();
+
+  const router = useRouter();
   const OnImageSelectPrev = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -80,15 +70,7 @@ function ImageUpload() {
         email: user?.email,
       });
       console.log("Result -->", result.data);
-
-      // const response = await fetch('/api/process-image', {
-      //   method: 'POST',
-      //   body: JSON.stringify({
-      //     imageUrl: imgUrl,
-      //     model: model,
-      //     description: description
-      //   })
-      // });
+      router.push("/view-code/" + uid);
     } catch (error: any) {
       console.error("Error uploading image:", error);
       setError(error.message || "Failed to upload image. Please try again.");
@@ -154,7 +136,7 @@ function ImageUpload() {
               <SelectValue placeholder="Select AI Model" />
             </SelectTrigger>
             <SelectContent>
-              {AiModelList.map((model, index) => (
+              {Constants?.AiModelList.map((model, index) => (
                 <SelectItem value={model.name} key={index}>
                   <div className="flex items-center gap-2">
                     <Image
