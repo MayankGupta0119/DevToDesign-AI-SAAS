@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const items = [
   {
@@ -57,15 +58,19 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="p-4">
-          <Image
-            src={"./logo.svg"}
-            alt="logo"
-            width={100}
-            height={100}
-            className="w-full h-full"
-          />
-          <h2 className="text-sm text-gray-400 text-center">Build Awesome</h2>
+        <div className="">
+          <Link href="/">
+            <Image
+              src={"/logo22.png"}
+              alt="logo"
+              width={300}
+              height={100}
+              className="object-cover"
+            />
+          </Link>
+          <h2 className="text-sm text-gray-400 text-center">
+            WireFrame To Code
+          </h2>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -77,8 +82,8 @@ export function AppSidebar() {
                   href={item.url}
                   key={index}
                   className={`p-2 text-lg flex gap-2 items-center
-                                 hover:bg-gray-100 rounded-lg
-                                 ${path == item.url && `bg-gray-200`}`}
+                                  hover:bg-gray-100 rounded-lg
+                                  ${path == item.url && `bg-gray-200`}`}
                 >
                   <item.icon className="h-5 w-5" />
                   <span>{item.title}</span>
@@ -88,9 +93,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <h2 className="p-2 text-gray-400 text-sm">Copyright @Tubeguruji</h2>
-      </SidebarFooter>
     </Sidebar>
   );
 }

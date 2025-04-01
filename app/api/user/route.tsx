@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
         data: {
           name: userName,
           email: userEmail,
-          credits: 0,
+          credits: 5,
         },
       });
       return NextResponse.json(newUser);

@@ -41,7 +41,13 @@ function ViweCode() {
       const response_data = result.data;
       console.log("Checking if code is null:", response_data?.code);
       setRecord(response_data);
-
+      if (response_data?.code && Object.keys(response_data.code).length > 0) {
+        console.log("Code already exists, using stored code.");
+        setCodeResp(response_data?.code.resp);
+        setLoading(false);
+        setIsReady(true);
+        return;
+      }
       if (
         response_data?.code == null ||
         Object.keys(response_data.code).length === 0
