@@ -29,3 +29,18 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  const reqUrl = req.url;
+  const { searchParams } = new URL(reqUrl);
+  const email = searchParams?.get("email");
+
+  if (email) {
+    const result = await prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+    return NextResponse.json(result);
+  }
+}

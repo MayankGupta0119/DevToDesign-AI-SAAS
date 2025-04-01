@@ -18,6 +18,7 @@ import axios from "axios";
 import { useAuthContext } from "@/app/provider";
 import { useRouter } from "next/navigation"; // ✅ Correct
 import Constants from "@/data/Constants";
+import { toast } from "sonner";
 
 function ImageUpload() {
   const [prevUrl, setPrevUrl] = useState<string | null>(null);
@@ -69,6 +70,12 @@ function ImageUpload() {
         model: model,
         email: user?.email,
       });
+      if (result?.data.error) {
+        console.log("Not enough credits");
+        toast("Not Enough Credits");
+        setIsLoading(false);
+        return;
+      }
       console.log("Result -->", result.data);
       router.push("/view-code/" + uid);
     } catch (error: any) {

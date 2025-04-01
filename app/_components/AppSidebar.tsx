@@ -31,7 +31,7 @@ const items = [
   },
   {
     title: "Design",
-    url: "/design",
+    url: "/designs",
     icon: Paintbrush,
   },
   {
